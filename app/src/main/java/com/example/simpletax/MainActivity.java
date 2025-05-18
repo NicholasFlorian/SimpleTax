@@ -5,6 +5,7 @@ import android.widget.Button;
 import android.widget.TextView;
 
 import androidx.appcompat.app.AppCompatActivity;
+import androidx.recyclerview.widget.DividerItemDecoration;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
@@ -36,13 +37,21 @@ public class MainActivity extends AppCompatActivity {
 
         // Initialize the RecyclerView and Adapter
         taxForms = new ArrayList<>();
-        taxForms.add(new T4("Marc Anthony Group", "MA1", 20000));
-        taxForms.add(new T4("Laughing Stock LTD", "L23", 30000));
-        taxForms.add(new T4("Earls", "3RL", 40000));
-        taxForms.add(new T5("Young Chef Initiative", "3RL", 50000, 0.2, "20000"));
+        taxForms.add(new T4("Marc Anthony Group", "MA1", 40));
+        taxForms.add(new T4("Laughing Stock LTD", "L23", 140));
+        taxForms.add(new T4("Earls", "3RL", 300));
+        taxForms.add(new T4("Marc Anthony Group", "MA1", 40));
+        taxForms.add(new T4("Laughing Stock LTD", "L23", 140));
+        taxForms.add(new T4("Earls", "3RL", 300));
+        taxForms.add(new T4("Marc Anthony Group", "MA1", 40));
+        taxForms.add(new T4("Laughing Stock LTD", "L23", 140));
+        taxForms.add(new T4("Earls", "3RL", 300));
+        taxForms.add(new T5("Young Chef Initiative", "3RL", 50, 0.2, "20000"));
 
         taxFormRecyclerView = findViewById(R.id.taxFormRecyclerView);
         taxFormRecyclerView.setLayoutManager(new LinearLayoutManager(this));
+        taxFormRecyclerView.addItemDecoration(new DividerItemDecoration(this, DividerItemDecoration.VERTICAL));
+
         taxFormAdapter = new TaxFormAdapter(taxForms);
         taxFormRecyclerView.setAdapter(taxFormAdapter);
 
