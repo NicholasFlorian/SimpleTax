@@ -3,7 +3,7 @@ package com.example.simpletax.domain;
 public class T5 extends TaxForm {
 
     private final double deductiblePercent;
-    private final double minGrossIncome;
+    private final double max;
 
     public T5(
         String name,
@@ -14,14 +14,14 @@ public class T5 extends TaxForm {
     ) {
         super(name, id, amount);
         this.deductiblePercent = deductiblePercent;
-        this.minGrossIncome = Double.parseDouble(minGrossIncome);
+        this.max = Double.parseDouble(minGrossIncome);
     }
 
     public double getDeductiblePercent() {
         return deductiblePercent;
     }
 
-    public double getMinGrossIncome() {
-        return minGrossIncome;
+    public double getMax() {
+        return max;
     }
 }

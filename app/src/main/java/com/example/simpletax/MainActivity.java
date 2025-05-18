@@ -8,7 +8,9 @@ import androidx.appcompat.app.AppCompatActivity;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
+import com.example.simpletax.TaxFormAdapter.TaxFormAdapter;
 import com.example.simpletax.domain.T4;
+import com.example.simpletax.domain.T5;
 import com.example.simpletax.domain.TaxForm;
 
 import java.util.ArrayList;
@@ -31,11 +33,13 @@ public class MainActivity extends AppCompatActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
+
         // Initialize the RecyclerView and Adapter
         taxForms = new ArrayList<>();
-        taxForms.add(new T4("T4", "131", 20000));
-        taxForms.add(new T4("T4", "132", 30000));
-        taxForms.add(new T4("T4", "133", 40000));
+        taxForms.add(new T4("Marc Anthony Group", "MA1", 20000));
+        taxForms.add(new T4("Laughing Stock LTD", "L23", 30000));
+        taxForms.add(new T4("Earls", "3RL", 40000));
+        taxForms.add(new T5("Young Chef Initiative", "3RL", 50000, 0.2, "20000"));
 
         taxFormRecyclerView = findViewById(R.id.taxFormRecyclerView);
         taxFormRecyclerView.setLayoutManager(new LinearLayoutManager(this));

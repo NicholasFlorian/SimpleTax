@@ -1,6 +1,6 @@
 package com.example.simpletax.domain;
 
-public class TaxForm {
+public abstract class TaxForm {
 
     private final String name;
     private final String id;
