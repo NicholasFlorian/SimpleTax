@@ -16,7 +16,9 @@ import com.example.simpletax.domain.TaxForm;
 
 import java.util.ArrayList;
 
-public class MainActivity extends AppCompatActivity {
+public class MainActivity extends AppCompatActivity
+        implements AddT4DialogFragment.AddT4DialogListener
+{
 
     RecyclerView taxFormRecyclerView;
     TaxFormAdapter taxFormAdapter;
@@ -40,13 +42,9 @@ public class MainActivity extends AppCompatActivity {
         taxForms.add(new T4("Marc Anthony Group", "MA1", 40));
         taxForms.add(new T4("Laughing Stock LTD", "L23", 140));
         taxForms.add(new T4("Earls", "3RL", 300));
-        taxForms.add(new T4("Marc Anthony Group", "MA1", 40));
-        taxForms.add(new T4("Laughing Stock LTD", "L23", 140));
-        taxForms.add(new T4("Earls", "3RL", 300));
-        taxForms.add(new T4("Marc Anthony Group", "MA1", 40));
-        taxForms.add(new T4("Laughing Stock LTD", "L23", 140));
-        taxForms.add(new T4("Earls", "3RL", 300));
-        taxForms.add(new T5("Young Chef Initiative", "3RL", 50, 0.2, "20000"));
+        taxForms.add(new T4("Upper Bench", "UBN", 75));
+        taxForms.add(new T5("Young Chef Initiative", "3RL", 50, 0.2, "200"));
+        taxForms.add(new T5("WSET", "", 50, 0.40, "150"));
 
         taxFormRecyclerView = findViewById(R.id.taxFormRecyclerView);
         taxFormRecyclerView.setLayoutManager(new LinearLayoutManager(this));
@@ -56,11 +54,22 @@ public class MainActivity extends AppCompatActivity {
         taxFormRecyclerView.setAdapter(taxFormAdapter);
 
         addT4Button = findViewById(R.id.addT4Button);
+        addT4Button.setOnClickListener(v -> showAddT4Dialog());
 
         grossIncomeText = findViewById(R.id.grossIncomeText);
         taxableIncomeText = findViewById(R.id.taxableIncomeText);
         netIncomeText = findViewById(R.id.netIncomeText);
     }
 
-    // Add your methods and logic here
+    public void showAddT4Dialog() {
+        AddT4DialogFragment dialog = new AddT4DialogFragment();
+        dialog.show(getSupportFragmentManager(), "AddT4Dialog");
+    }
+
+    @Override
+    public void onDialogAddClick(T4 t4) {
+        taxForms.add(t4);
+        taxFormAdapter.notifyItemInserted(taxForms.size() - 1);
+    }
+
 }

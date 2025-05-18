@@ -27,6 +27,6 @@ public class T5ViewHolder extends TaxViewHolder<T5> {
         amountText.setText(String.valueOf(taxForm.getAmount()));
         idText.setText(taxForm.getId());
         maxText.setText(String.valueOf(taxForm.getMax()));
-        deductibleText.setText(String.valueOf(taxForm.getDeductiblePercent()));
+        deductibleText.setText(String.valueOf(taxForm.getDeductiblePercent() * 100));
     }
 }
