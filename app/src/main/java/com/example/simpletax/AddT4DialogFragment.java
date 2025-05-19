@@ -1,7 +1,5 @@
 package com.example.simpletax;
 
-import android.app.AlertDialog;
-import android.app.Dialog;
 import android.content.Context;
 import android.os.Bundle;
 import android.view.LayoutInflater;
@@ -21,7 +19,6 @@ public class AddT4DialogFragment extends DialogFragment {
     EditText nameEditText;
     EditText amountEditText;
     EditText idEditText;
-
     Button addButton;
 
     public interface AddT4DialogListener {

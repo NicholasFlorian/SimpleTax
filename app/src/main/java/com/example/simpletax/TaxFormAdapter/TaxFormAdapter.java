@@ -21,8 +21,15 @@ public class TaxFormAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder
 
     ArrayList<TaxForm> taxForms;
 
-    public TaxFormAdapter(ArrayList<TaxForm> taxForms) {
+    public interface TaxFormAdapterListener {
+        void onTaxFormClick(int position);
+    }
+
+    private final TaxFormAdapterListener listener;
+
+    public TaxFormAdapter(ArrayList<TaxForm> taxForms, TaxFormAdapterListener listener) {
         this.taxForms = taxForms;
+        this.listener = listener;
     }
 
     @Override
@@ -44,7 +51,7 @@ public class TaxFormAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder
             case T4_VIEW:
                 view = LayoutInflater.from(parent.getContext())
                         .inflate(R.layout.t4_form, parent, false);
-                return new T4ViewHolder(view);
+                return new T4ViewHolder(view, listener);
             case T5_VIEW:
                 view = LayoutInflater.from(parent.getContext())
                         .inflate(R.layout.t5_form, parent, false);

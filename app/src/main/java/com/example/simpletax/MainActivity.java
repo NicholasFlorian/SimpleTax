@@ -3,6 +3,7 @@ package com.example.simpletax;
 import android.os.Bundle;
 import android.widget.Button;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.recyclerview.widget.DividerItemDecoration;
@@ -16,8 +17,9 @@ import com.example.simpletax.domain.TaxForm;
 
 import java.util.ArrayList;
 
-public class MainActivity extends AppCompatActivity
-        implements AddT4DialogFragment.AddT4DialogListener
+public class MainActivity extends AppCompatActivity implements
+        AddT4DialogFragment.AddT4DialogListener,
+        TaxFormAdapter.TaxFormAdapterListener
 {
 
     RecyclerView taxFormRecyclerView;
@@ -50,7 +52,7 @@ public class MainActivity extends AppCompatActivity
         taxFormRecyclerView.setLayoutManager(new LinearLayoutManager(this));
         taxFormRecyclerView.addItemDecoration(new DividerItemDecoration(this, DividerItemDecoration.VERTICAL));
 
-        taxFormAdapter = new TaxFormAdapter(taxForms);
+        taxFormAdapter = new TaxFormAdapter(taxForms, this);
         taxFormRecyclerView.setAdapter(taxFormAdapter);
 
         addT4Button = findViewById(R.id.addT4Button);
@@ -72,4 +74,12 @@ public class MainActivity extends AppCompatActivity
         taxFormAdapter.notifyItemInserted(taxForms.size() - 1);
     }
 
+    @Override
+    public void onTaxFormClick(int position) {
+        TaxForm taxForm = taxForms.get(position);
+        if (taxForm instanceof T4) {
+            taxForms.remove(position);
+            taxFormAdapter.notifyItemRemoved(position);
+        }
+    }
 }
