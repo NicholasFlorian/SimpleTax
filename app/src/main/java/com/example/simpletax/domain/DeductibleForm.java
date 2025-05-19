@@ -1,11 +1,11 @@
 package com.example.simpletax.domain;
 
-public class T5 extends TaxForm {
+public class DeductibleForm extends TaxForm {
 
     private final double deductiblePercent;
     private final double max;
 
-    public T5(
+    public DeductibleForm(
         String name,
         String id,
         double amount,

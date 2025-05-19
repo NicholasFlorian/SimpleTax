@@ -5,21 +5,21 @@ import android.view.View;
 import androidx.annotation.NonNull;
 import androidx.recyclerview.widget.RecyclerView;
 
-import com.example.simpletax.domain.T4;
+import com.example.simpletax.R;
+import com.example.simpletax.domain.IncomeForm;
 
-public class T4ViewHolder extends TaxViewHolder<T4> {
+public class IncomeViewHolder extends TaxViewHolder<IncomeForm> {
 
     TaxFormAdapter.TaxFormAdapterListener listener;
 
-    public T4ViewHolder(@NonNull View view, TaxFormAdapter.TaxFormAdapterListener listener) {
+    public IncomeViewHolder(@NonNull View view, TaxFormAdapter.TaxFormAdapterListener listener) {
         super(view);
 
         this.listener = listener;
     }
 
     @Override
-    public void bind(@NonNull T4 taxForm) {
-        typeText.setText("T4");
+    public void bind(@NonNull IncomeForm taxForm) {
         nameText.setText(taxForm.getName());
         amountText.setText(String.valueOf(taxForm.getAmount()));
         idText.setText(taxForm.getId());

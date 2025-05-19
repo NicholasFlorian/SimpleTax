@@ -8,16 +8,16 @@ import androidx.annotation.NonNull;
 import androidx.recyclerview.widget.RecyclerView;
 
 import com.example.simpletax.R;
-import com.example.simpletax.domain.T4;
-import com.example.simpletax.domain.T5;
+import com.example.simpletax.domain.IncomeForm;
+import com.example.simpletax.domain.DeductibleForm;
 import com.example.simpletax.domain.TaxForm;
 
 import java.util.ArrayList;
 
 public class TaxFormAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder> {
 
-    private static final int T4_VIEW = 0;
-    private static final int T5_VIEW = 1;
+    private static final int INCOME_VIEW = 0;
+    private static final int DEDUCTIBLE_VIEW = 1;
 
     ArrayList<TaxForm> taxForms;
 
@@ -35,10 +35,10 @@ public class TaxFormAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder
     @Override
     public int getItemViewType(int position) {
         TaxForm taxForm = taxForms.get(position);
-        if (taxForm instanceof T4) {
-            return T4_VIEW;
-        } else if (taxForm instanceof T5) {
-            return T5_VIEW;
+        if (taxForm instanceof IncomeForm) {
+            return INCOME_VIEW;
+        } else if (taxForm instanceof DeductibleForm) {
+            return DEDUCTIBLE_VIEW;
         }
         return -1;
     }
@@ -48,14 +48,14 @@ public class TaxFormAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder
     public RecyclerView.ViewHolder onCreateViewHolder(@NonNull ViewGroup parent, int viewType) {
         View view;
         switch(viewType) {
-            case T4_VIEW:
+            case INCOME_VIEW:
                 view = LayoutInflater.from(parent.getContext())
-                        .inflate(R.layout.t4_form, parent, false);
-                return new T4ViewHolder(view, listener);
-            case T5_VIEW:
+                        .inflate(R.layout.card_income_form, parent, false);
+                return new IncomeViewHolder(view, listener);
+            case DEDUCTIBLE_VIEW:
                 view = LayoutInflater.from(parent.getContext())
-                        .inflate(R.layout.t5_form, parent, false);
-                return new T5ViewHolder(view);
+                        .inflate(R.layout.card_deductible_form, parent, false);
+                return new DeductibleViewHolder(view);
             default:
                 throw new IllegalArgumentException("Invalid view type");
         }
@@ -64,10 +64,10 @@ public class TaxFormAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder
     @Override
     public void onBindViewHolder(@NonNull RecyclerView.ViewHolder holder, int position) {
         TaxForm taxForm = taxForms.get(position);
-        if (holder instanceof T4ViewHolder) {
-            ((T4ViewHolder) holder).bind((T4) taxForm);
-        } else if (holder instanceof T5ViewHolder) {
-            ((T5ViewHolder) holder).bind((T5) taxForm);
+        if (holder instanceof IncomeViewHolder) {
+            ((IncomeViewHolder) holder).bind((IncomeForm) taxForm);
+        } else if (holder instanceof DeductibleViewHolder) {
+            ((DeductibleViewHolder) holder).bind((DeductibleForm) taxForm);
         } else {
             throw new IllegalArgumentException("Invalid view holder type");
         }

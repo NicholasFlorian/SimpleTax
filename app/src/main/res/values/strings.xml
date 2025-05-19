@@ -1,3 +1,7 @@
 <resources>
     <string name="app_name">SimpleTax</string>
+    <string name="incomeCode">T4</string>
+    <string name="deductibleCode">T5</string>
+    <string name="amount">Amount:</string>
+    <string name="deductible">Deductible:</string>
 </resources>

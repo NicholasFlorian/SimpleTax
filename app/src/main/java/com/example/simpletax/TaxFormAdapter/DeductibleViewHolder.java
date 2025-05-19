@@ -6,14 +6,14 @@ import android.widget.TextView;
 import androidx.annotation.NonNull;
 
 import com.example.simpletax.R;
-import com.example.simpletax.domain.T5;
+import com.example.simpletax.domain.DeductibleForm;
 
-public class T5ViewHolder extends TaxViewHolder<T5> {
+public class DeductibleViewHolder extends TaxViewHolder<DeductibleForm> {
 
     TextView maxText;
     TextView deductibleText;
 
-    public T5ViewHolder(@NonNull View view) {
+    public DeductibleViewHolder(@NonNull View view) {
         super(view);
 
         deductibleText = view.findViewById(R.id.deductibleText);
@@ -21,8 +21,7 @@ public class T5ViewHolder extends TaxViewHolder<T5> {
     }
 
     @Override
-    public void bind(@NonNull T5 taxForm) {
-        typeText.setText("T5");
+    public void bind(@NonNull DeductibleForm taxForm) {
         nameText.setText(taxForm.getName());
         amountText.setText(String.valueOf(taxForm.getAmount()));
         idText.setText(taxForm.getId());

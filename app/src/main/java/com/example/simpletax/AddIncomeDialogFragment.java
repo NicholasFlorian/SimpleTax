@@ -12,26 +12,26 @@ import android.widget.Toast;
 import androidx.annotation.NonNull;
 import androidx.fragment.app.DialogFragment;
 
-import com.example.simpletax.domain.T4;
+import com.example.simpletax.domain.IncomeForm;
 
-public class AddT4DialogFragment extends DialogFragment {
+public class AddIncomeDialogFragment extends DialogFragment {
 
     EditText nameEditText;
     EditText amountEditText;
     EditText idEditText;
     Button addButton;
 
-    public interface AddT4DialogListener {
-        void onDialogAddClick(T4 t4);
+    public interface AddIncomeDialogListener {
+        void onDialogAddClick(IncomeForm incomeForm);
     }
 
-    private AddT4DialogListener listener;
+    private AddIncomeDialogListener listener;
 
     @Override
     public void onAttach(@NonNull Context context) {
         super.onAttach(context);
         try {
-            listener = (AddT4DialogListener) context;
+            listener = (AddIncomeDialogListener) context;
         } catch (ClassCastException e) {
             throw new ClassCastException(context + " must implement AddT4DialogListener");
         }
@@ -43,7 +43,7 @@ public class AddT4DialogFragment extends DialogFragment {
             ViewGroup container,
             Bundle savedInstanceState
     ) {
-        View view = inflater.inflate(R.layout.dialog_add_t4, container, false);
+        View view = inflater.inflate(R.layout.dialog_add_income, container, false);
 
         nameEditText = view.findViewById(R.id.nameEditText);
         amountEditText = view.findViewById(R.id.amountEditText);
@@ -81,7 +81,7 @@ public class AddT4DialogFragment extends DialogFragment {
             reportError("Amount must be greater than 0");
             return;
         }
-        listener.onDialogAddClick(new T4(nameValue, idValue.toUpperCase(), amountDouble));
+        listener.onDialogAddClick(new IncomeForm(nameValue, idValue.toUpperCase(), amountDouble));
         dismiss();
     }
 
