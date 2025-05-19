@@ -20,7 +20,7 @@ public class MockSimpleTaxApi {
     private double netIncome;
 
     public interface SimpleTaxApiListener {
-        void onUpdated();
+        void onTaxFormsUpdated();
     }
 
     SimpleTaxApiListener listener;
@@ -44,7 +44,7 @@ public class MockSimpleTaxApi {
         taxFormList.addAll(deductibleFormList);
         taxFormList.addAll(getIncomeForms());
         calculate();
-        listener.onUpdated();
+        listener.onTaxFormsUpdated();
     }
 
     private void calculate() {
@@ -53,11 +53,24 @@ public class MockSimpleTaxApi {
             grossIncome += incomeForm.getAmount();
         }
 
+        calculateDeductions();
+        taxableIncome = grossIncome - deductions;
+        netIncome = taxableIncome * 0.85;
+    }
+
+    private void calculateDeductions() {
         deductions = 0;
         for(DeductibleForm deductibleForm : deductibleFormList) {
 
-            double totalTaxable;
-            if (incomeFormMap.containsKey(deductibleForm.getId())) {
+            if(!deductibleForm.isEnabled()){
+                continue;
+            }
+
+            double totalTaxable = 0;
+            if(deductibleForm.getId().isEmpty()) {
+                totalTaxable = Math.min(deductibleForm.getMax(), grossIncome);
+            }
+            else if (incomeFormMap.containsKey(deductibleForm.getId())) {
                 ArrayList<IncomeForm> incomeForms = incomeFormMap.get(deductibleForm.getId());
 
                 double idTotalIncome = 0;
@@ -67,15 +80,12 @@ public class MockSimpleTaxApi {
                 totalTaxable = Math.min(deductibleForm.getMax(), idTotalIncome);
             }
             else {
-                totalTaxable = Math.min(deductibleForm.getMax(), grossIncome);
+                continue;
             }
 
             double deductibleAmount = totalTaxable * deductibleForm.getDeductiblePercent();
             deductions += deductibleAmount;
         }
-
-        taxableIncome = grossIncome - deductions;
-        netIncome = taxableIncome * 0.85;
     }
 
     /* Public Facing Functions in the API */
@@ -101,7 +111,7 @@ public class MockSimpleTaxApi {
         return taxFormList;
     }
 
-    public void addIncomeForm(IncomeForm incomeForm) {
+    public int addIncomeForm(IncomeForm incomeForm) {
         if(incomeFormMap.containsKey(incomeForm.getId())) {
             incomeFormMap.get(incomeForm.getId()).add(incomeForm);
         } else {
@@ -110,6 +120,7 @@ public class MockSimpleTaxApi {
             incomeFormMap.put(incomeForm.getId(), incomeForms);
         }
         updateList();
+        return taxFormList.size() - 1;
     }
 
     public void removeIncomeForm(int position) {
@@ -124,6 +135,12 @@ public class MockSimpleTaxApi {
                 }
             }
         }
+        updateList();
+    }
+
+    public void toggleDeductibleForm(int position) {
+        DeductibleForm deductibleForm = (DeductibleForm) taxFormList.get(position);
+        deductibleForm.flipEnabled();
         updateList();
     }
 

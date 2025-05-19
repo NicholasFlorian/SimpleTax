@@ -4,6 +4,7 @@ public class DeductibleForm extends TaxForm {
 
     private final double deductiblePercent;
     private final double max;
+    private boolean enabled;
 
     public DeductibleForm(
         String name,
@@ -14,6 +15,7 @@ public class DeductibleForm extends TaxForm {
         super(name, id);
         this.deductiblePercent = deductiblePercent;
         this.max = minGrossIncome;
+        this.enabled = true;
     }
 
     public double getDeductiblePercent() {
@@ -22,5 +24,13 @@ public class DeductibleForm extends TaxForm {
 
     public double getMax() {
         return max;
+    }
+
+    public boolean isEnabled() {
+        return enabled;
+    }
+
+    public void flipEnabled() {
+        this.enabled = !this.enabled;
     }
 }

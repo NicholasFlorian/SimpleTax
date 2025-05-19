@@ -27,7 +27,7 @@ public class IncomeViewHolder extends TaxViewHolder<IncomeForm> {
                 String.format(Locale.CANADA, "%.2f", taxForm.getAmount()));
         idText.setText(taxForm.getId());
 
-        itemView.setOnClickListener(v -> {
+        itemView.setOnLongClickListener(v -> {
             if (listener != null) {
                 int position = getAdapterPosition();
 
@@ -35,6 +35,7 @@ public class IncomeViewHolder extends TaxViewHolder<IncomeForm> {
                     listener.onTaxFormClick(position);
                 }
             }
+            return false;
         });
     }
 }

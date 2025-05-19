@@ -75,8 +75,8 @@ public class MainActivity extends AppCompatActivity implements
 
     @Override
     public void onDialogAddClick(IncomeForm incomeForm) {
-        simpleTaxApi.addIncomeForm(incomeForm);
-        taxFormAdapter.notifyItemInserted(simpleTaxApi.getTaxForms().size() - 1);
+        int insertedAt = simpleTaxApi.addIncomeForm(incomeForm);
+        taxFormAdapter.notifyItemInserted(insertedAt);
     }
 
     @Override
@@ -85,13 +85,18 @@ public class MainActivity extends AppCompatActivity implements
         if (taxForm instanceof IncomeForm) {
             simpleTaxApi.removeIncomeForm(position);
             taxFormAdapter.notifyItemRemoved(position);
-        } else {
-            Toast.makeText(this, "This not an Income form", Toast.LENGTH_SHORT).show();
+        }
+        else if(taxForm instanceof DeductibleForm) {
+            simpleTaxApi.toggleDeductibleForm(position);
+            taxFormAdapter.notifyItemChanged(position);
+        }
+        else {
+            Toast.makeText(this, "This not a valid form", Toast.LENGTH_SHORT).show();
         }
     }
 
     @Override
-    public void onUpdated() {
+    public void onTaxFormsUpdated() {
         grossIncomeText.setText(
                 String.format(Locale.CANADA, "%.2f", simpleTaxApi.getGrossIncome()));
         deductionsText.setText(
