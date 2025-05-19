@@ -23,43 +23,21 @@
         android:layout_marginStart="32dp"
         android:layout_marginTop="4dp"
         android:layout_marginBottom="8dp"
+        android:text="@string/maxTitle"
         android:textColor="@color/title_200"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@+id/deductibleTitle" />
 
     <TextView
-        android:id="@+id/amountText"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_marginStart="8dp"
-        android:textColor="@color/title_200"
-        app:layout_constraintBottom_toBottomOf="@+id/amountTitle"
-        app:layout_constraintStart_toEndOf="@+id/deductibleTitle" />
-
-    <TextView
-        android:id="@+id/amountTitle"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_marginStart="32dp"
-        android:layout_marginTop="8dp"
-        android:fontFamily="sans-serif-medium"
-        android:text="@string/amount"
-        android:textColor="@color/title_200"
-        android:textFontWeight="400"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/typeText" />
-
-    <TextView
         android:id="@+id/deductibleTitle"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_marginStart="32dp"
-        android:layout_marginTop="4dp"
-        android:text="@string/deductible"
+        android:text="@string/deductibleTitle"
         android:textColor="@color/title_200"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/amountTitle" />
+        app:layout_constraintTop_toBottomOf="@+id/typeText" />
 
     <TextView
         android:id="@+id/typeText"

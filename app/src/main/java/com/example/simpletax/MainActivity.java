@@ -3,6 +3,7 @@ package com.example.simpletax;
 import android.os.Bundle;
 import android.widget.Button;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.recyclerview.widget.DividerItemDecoration;
@@ -15,10 +16,12 @@ import com.example.simpletax.domain.DeductibleForm;
 import com.example.simpletax.domain.TaxForm;
 
 import java.util.ArrayList;
+import java.util.Locale;
 
 public class MainActivity extends AppCompatActivity implements
         AddIncomeDialogFragment.AddIncomeDialogListener,
-        TaxFormAdapter.TaxFormAdapterListener
+        TaxFormAdapter.TaxFormAdapterListener,
+        MockSimpleTaxApi.SimpleTaxApiListener
 {
 
     RecyclerView taxFormRecyclerView;
@@ -27,11 +30,12 @@ public class MainActivity extends AppCompatActivity implements
     Button addT4Button;
 
     TextView grossIncomeText;
+    TextView deductionsText;
     TextView taxableIncomeText;
     TextView netIncomeText;
 
     // replace by your API :)
-    ArrayList<TaxForm> taxForms;
+    private MockSimpleTaxApi simpleTaxApi;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -39,19 +43,13 @@ public class MainActivity extends AppCompatActivity implements
         setContentView(R.layout.activity_main);
 
         // Initialize the RecyclerView and Adapter
-        taxForms = new ArrayList<>();
-        taxForms.add(new DeductibleForm("Young Chef Initiative", "3RL", 50, 0.2, "200"));
-        taxForms.add(new DeductibleForm("WSET", "", 50, 0.40, "150"));
-        taxForms.add(new IncomeForm("Marc Anthony Group", "MA1", 40));
-        taxForms.add(new IncomeForm("Laughing Stock LTD", "L23", 140));
-        taxForms.add(new IncomeForm("Earls", "3RL", 300));
-        taxForms.add(new IncomeForm("Upper Bench", "UBN", 75));
-
         taxFormRecyclerView = findViewById(R.id.taxFormRecyclerView);
         taxFormRecyclerView.setLayoutManager(new LinearLayoutManager(this));
-        taxFormRecyclerView.addItemDecoration(new DividerItemDecoration(this, DividerItemDecoration.VERTICAL));
+        taxFormRecyclerView.addItemDecoration(
+                new DividerItemDecoration(this, DividerItemDecoration.VERTICAL));
 
-        taxFormAdapter = new TaxFormAdapter(taxForms, this);
+        simpleTaxApi = new MockSimpleTaxApi(this);
+        taxFormAdapter = new TaxFormAdapter(simpleTaxApi.getTaxForms(), this);
         taxFormRecyclerView.setAdapter(taxFormAdapter);
 
         addT4Button = findViewById(R.id.addT4Button);
@@ -60,6 +58,14 @@ public class MainActivity extends AppCompatActivity implements
         grossIncomeText = findViewById(R.id.grossIncomeText);
         taxableIncomeText = findViewById(R.id.taxableIncomeText);
         netIncomeText = findViewById(R.id.netIncomeText);
+        deductionsText = findViewById(R.id.deductionsText);
+
+        /*
+         * These functions within simpleTaxAPI call onUpdated() so they must be called
+         * after the text views are initialized
+         */
+        simpleTaxApi.fetchT5();
+        simpleTaxApi.loadInitialIncomeForms();
     }
 
     public void showAddT4Dialog() {
@@ -69,16 +75,30 @@ public class MainActivity extends AppCompatActivity implements
 
     @Override
     public void onDialogAddClick(IncomeForm incomeForm) {
-        taxForms.add(incomeForm);
-        taxFormAdapter.notifyItemInserted(taxForms.size() - 1);
+        simpleTaxApi.addIncomeForm(incomeForm);
+        taxFormAdapter.notifyItemInserted(simpleTaxApi.getTaxForms().size() - 1);
     }
 
     @Override
     public void onTaxFormClick(int position) {
-        TaxForm taxForm = taxForms.get(position);
+        TaxForm taxForm = simpleTaxApi.getTaxForms().get(position);
         if (taxForm instanceof IncomeForm) {
-            taxForms.remove(position);
+            simpleTaxApi.removeIncomeForm(position);
             taxFormAdapter.notifyItemRemoved(position);
+        } else {
+            Toast.makeText(this, "This not an Income form", Toast.LENGTH_SHORT).show();
         }
+    }
+
+    @Override
+    public void onUpdated() {
+        grossIncomeText.setText(
+                String.format(Locale.CANADA, "%.2f", simpleTaxApi.getGrossIncome()));
+        deductionsText.setText(
+                String.format(Locale.CANADA, "%.2f", simpleTaxApi.getDeductions()));
+        taxableIncomeText.setText(
+                String.format(Locale.CANADA,"%.2f", simpleTaxApi.getTaxableIncome()));
+        netIncomeText.setText(
+                String.format(Locale.CANADA,"%.2f", simpleTaxApi.getNetIncome()));
     }
 }

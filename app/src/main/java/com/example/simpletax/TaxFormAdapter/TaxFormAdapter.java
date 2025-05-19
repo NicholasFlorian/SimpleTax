@@ -12,14 +12,14 @@ import com.example.simpletax.domain.IncomeForm;
 import com.example.simpletax.domain.DeductibleForm;
 import com.example.simpletax.domain.TaxForm;
 
-import java.util.ArrayList;
+import java.util.List;
 
 public class TaxFormAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder> {
 
     private static final int INCOME_VIEW = 0;
     private static final int DEDUCTIBLE_VIEW = 1;
 
-    ArrayList<TaxForm> taxForms;
+    List<TaxForm> taxForms;
 
     public interface TaxFormAdapterListener {
         void onTaxFormClick(int position);
@@ -27,7 +27,7 @@ public class TaxFormAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder
 
     private final TaxFormAdapterListener listener;
 
-    public TaxFormAdapter(ArrayList<TaxForm> taxForms, TaxFormAdapterListener listener) {
+    public TaxFormAdapter(List<TaxForm> taxForms, TaxFormAdapterListener listener) {
         this.taxForms = taxForms;
         this.listener = listener;
     }

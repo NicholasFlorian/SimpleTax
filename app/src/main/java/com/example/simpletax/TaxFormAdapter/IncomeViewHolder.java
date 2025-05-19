@@ -8,6 +8,8 @@ import androidx.recyclerview.widget.RecyclerView;
 import com.example.simpletax.R;
 import com.example.simpletax.domain.IncomeForm;
 
+import java.util.Locale;
+
 public class IncomeViewHolder extends TaxViewHolder<IncomeForm> {
 
     TaxFormAdapter.TaxFormAdapterListener listener;
@@ -21,7 +23,8 @@ public class IncomeViewHolder extends TaxViewHolder<IncomeForm> {
     @Override
     public void bind(@NonNull IncomeForm taxForm) {
         nameText.setText(taxForm.getName());
-        amountText.setText(String.valueOf(taxForm.getAmount()));
+        amountText.setText(
+                String.format(Locale.CANADA, "%.2f", taxForm.getAmount()));
         idText.setText(taxForm.getId());
 
         itemView.setOnClickListener(v -> {

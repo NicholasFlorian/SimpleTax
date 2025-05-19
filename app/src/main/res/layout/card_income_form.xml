@@ -24,7 +24,7 @@
         android:layout_marginTop="8dp"
         android:layout_marginBottom="8dp"
         android:fontFamily="sans-serif-medium"
-        android:text="@+id/amount"
+        android:text="@string/amountTitle"
         android:textColor="@color/title_200"
         android:textFontWeight="400"
         app:layout_constraintBottom_toBottomOf="parent"
@@ -38,6 +38,7 @@
         android:layout_marginStart="16dp"
         android:layout_marginTop="8dp"
         android:textColor="@color/title_300"
+        android:text="@string/incomeCode"
         android:textSize="24sp"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent" />

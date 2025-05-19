@@ -2,6 +2,16 @@
     <string name="app_name">SimpleTax</string>
     <string name="incomeCode">T4</string>
     <string name="deductibleCode">T5</string>
-    <string name="amount">Amount:</string>
-    <string name="deductible">Deductible:</string>
+
+    <string name="amountTitle">Amount:</string>
+    <string name="deductibleTitle">Deductible:</string>
+    <string name="maxTitle">Max:</string>
+
+    <string name="nameHint">Name</string>
+    <string name="amountHint">Amount</string>
+    <string name="idHint">ID</string>
+    <string name="add_t4">Add T4</string>
+    <string name="gross_income_title">Gross Income:</string>
+    <string name="taxable_income_title">Taxable Income:</string>
+    <string name="net_income_title">Net Income:</string>
 </resources>

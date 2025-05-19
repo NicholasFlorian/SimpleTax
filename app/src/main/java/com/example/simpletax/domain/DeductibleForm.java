@@ -8,13 +8,12 @@ public class DeductibleForm extends TaxForm {
     public DeductibleForm(
         String name,
         String id,
-        double amount,
         double deductiblePercent,
-        String minGrossIncome
+        double minGrossIncome
     ) {
-        super(name, id, amount);
+        super(name, id);
         this.deductiblePercent = deductiblePercent;
-        this.max = Double.parseDouble(minGrossIncome);
+        this.max = minGrossIncome;
     }
 
     public double getDeductiblePercent() {
