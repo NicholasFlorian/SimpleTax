@@ -19,7 +19,7 @@ public class TaxFormAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder
     private static final int INCOME_VIEW = 0;
     private static final int DEDUCTIBLE_VIEW = 1;
 
-    List<TaxForm> taxForms;
+    List<TaxForm> taxFormList;
 
     public interface TaxFormAdapterListener {
         void onTaxFormClick(int position);
@@ -28,13 +28,13 @@ public class TaxFormAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder
     private final TaxFormAdapterListener listener;
 
     public TaxFormAdapter(List<TaxForm> taxForms, TaxFormAdapterListener listener) {
-        this.taxForms = taxForms;
+        this.taxFormList = taxForms;
         this.listener = listener;
     }
 
     @Override
     public int getItemViewType(int position) {
-        TaxForm taxForm = taxForms.get(position);
+        TaxForm taxForm = taxFormList.get(position);
         if (taxForm instanceof IncomeForm) {
             return INCOME_VIEW;
         } else if (taxForm instanceof DeductibleForm) {
@@ -63,7 +63,7 @@ public class TaxFormAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder
 
     @Override
     public void onBindViewHolder(@NonNull RecyclerView.ViewHolder holder, int position) {
-        TaxForm taxForm = taxForms.get(position);
+        TaxForm taxForm = taxFormList.get(position);
         if (holder instanceof IncomeViewHolder) {
             ((IncomeViewHolder) holder).bind((IncomeForm) taxForm);
         } else if (holder instanceof DeductibleViewHolder) {
@@ -75,6 +75,11 @@ public class TaxFormAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder
 
     @Override
     public int getItemCount() {
-        return taxForms.size();
+        return taxFormList.size();
+    }
+
+    @Override
+    public long getItemId(int position) {
+        return taxFormList.get(position).hashCode();
     }
 }

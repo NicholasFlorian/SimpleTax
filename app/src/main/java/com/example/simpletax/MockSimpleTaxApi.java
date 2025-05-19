@@ -5,6 +5,7 @@ import com.example.simpletax.domain.DeductibleForm;
 import com.example.simpletax.domain.TaxForm;
 
 import java.util.ArrayList;
+import java.util.Comparator;
 import java.util.HashMap;
 import java.util.List;
 
@@ -104,7 +105,7 @@ public class MockSimpleTaxApi {
     }
 
     public List<IncomeForm> getIncomeForms() {
-        return incomeFormMap.values().stream().flatMap(ArrayList::stream).toList();
+        return incomeFormMap.values().stream().flatMap(ArrayList::stream).sorted(Comparator.comparing(TaxForm::getCreatedAt)).toList();
     }
 
     public List<TaxForm> getTaxForms() {
@@ -126,12 +127,12 @@ public class MockSimpleTaxApi {
     public void removeIncomeForm(int position) {
         TaxForm taxForm = taxFormList.get(position);
         if (taxForm instanceof IncomeForm) {
-            IncomeForm incomeForm = (IncomeForm) taxForm;
-            ArrayList<IncomeForm> incomeForms = incomeFormMap.get(incomeForm.getId());
+            String id = taxForm.getId();
+            ArrayList<IncomeForm> incomeForms = incomeFormMap.get(id);
             if (incomeForms != null) {
-                incomeForms.remove(incomeForm);
+                incomeForms.remove(taxForm);
                 if (incomeForms.isEmpty()) {
-                    incomeFormMap.remove(incomeForm.getId());
+                    incomeFormMap.remove(id);
                 }
             }
         }
