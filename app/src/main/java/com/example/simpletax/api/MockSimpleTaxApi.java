@@ -1,4 +1,4 @@
-package com.example.simpletax;
+package com.example.simpletax.api;
 
 import com.example.simpletax.domain.IncomeForm;
 import com.example.simpletax.domain.DeductibleForm;

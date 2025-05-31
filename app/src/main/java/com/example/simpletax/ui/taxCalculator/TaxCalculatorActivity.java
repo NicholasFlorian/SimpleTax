@@ -1,4 +1,4 @@
-package com.example.simpletax;
+package com.example.simpletax.ui.taxCalculator;
 
 import android.os.Bundle;
 import android.widget.Button;
@@ -10,15 +10,17 @@ import androidx.recyclerview.widget.DividerItemDecoration;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
-import com.example.simpletax.TaxFormAdapter.TaxFormAdapter;
+import com.example.simpletax.api.MockSimpleTaxApi;
+import com.example.simpletax.R;
+import com.example.simpletax.taxFormAdapter.TaxFormAdapter;
 import com.example.simpletax.domain.IncomeForm;
 import com.example.simpletax.domain.DeductibleForm;
 import com.example.simpletax.domain.TaxForm;
+import com.example.simpletax.ui.addIncome.AddIncomeDialogFragment;
 
-import java.util.ArrayList;
 import java.util.Locale;
 
-public class MainActivity extends AppCompatActivity implements
+public class TaxCalculatorActivity extends AppCompatActivity implements
         AddIncomeDialogFragment.AddIncomeDialogListener,
         TaxFormAdapter.TaxFormAdapterListener,
         MockSimpleTaxApi.SimpleTaxApiListener

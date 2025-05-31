@@ -1,4 +1,4 @@
-package com.example.simpletax;
+package com.example.simpletax.ui.addIncome;
 
 import android.content.Context;
 import android.os.Bundle;
@@ -12,20 +12,21 @@ import android.widget.Toast;
 import androidx.annotation.NonNull;
 import androidx.fragment.app.DialogFragment;
 
+import com.example.simpletax.R;
 import com.example.simpletax.domain.IncomeForm;
 
 public class AddIncomeDialogFragment extends DialogFragment {
-
-    EditText nameEditText;
-    EditText amountEditText;
-    EditText idEditText;
-    Button addButton;
 
     public interface AddIncomeDialogListener {
         void onDialogAddClick(IncomeForm incomeForm);
     }
 
     private AddIncomeDialogListener listener;
+
+    EditText nameEditText;
+    EditText amountEditText;
+    EditText idEditText;
+    Button addButton;
 
     @Override
     public void onAttach(@NonNull Context context) {

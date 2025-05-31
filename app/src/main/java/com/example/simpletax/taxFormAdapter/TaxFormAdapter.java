@@ -1,4 +1,4 @@
-package com.example.simpletax.TaxFormAdapter;
+package com.example.simpletax.taxFormAdapter;
 
 import android.view.LayoutInflater;
 import android.view.View;

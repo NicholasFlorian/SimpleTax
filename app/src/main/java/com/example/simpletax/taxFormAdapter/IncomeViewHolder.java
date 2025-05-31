@@ -1,11 +1,10 @@
-package com.example.simpletax.TaxFormAdapter;
+package com.example.simpletax.taxFormAdapter;
 
 import android.view.View;
 
 import androidx.annotation.NonNull;
 import androidx.recyclerview.widget.RecyclerView;
 
-import com.example.simpletax.R;
 import com.example.simpletax.domain.IncomeForm;
 
 import java.util.Locale;
