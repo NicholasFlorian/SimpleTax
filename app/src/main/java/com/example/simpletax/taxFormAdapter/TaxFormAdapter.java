@@ -5,6 +5,9 @@ import android.view.View;
 import android.view.ViewGroup;
 
 import androidx.annotation.NonNull;
+import androidx.lifecycle.LifecycleOwner;
+import androidx.recyclerview.widget.AsyncListDiffer;
+import androidx.recyclerview.widget.DiffUtil;
 import androidx.recyclerview.widget.RecyclerView;
 
 import com.example.simpletax.R;
@@ -13,28 +16,43 @@ import com.example.simpletax.domain.DeductibleForm;
 import com.example.simpletax.domain.TaxForm;
 
 import java.util.List;
+import java.util.Objects;
 
 public class TaxFormAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder> {
 
     private static final int INCOME_VIEW = 0;
     private static final int DEDUCTIBLE_VIEW = 1;
 
-    List<TaxForm> taxFormList;
+    private final LifecycleOwner lifecycleOwner;
+    private final AsyncListDiffer<TaxForm> taxFormDiffer;
 
-    public interface TaxFormAdapterListener {
-        void onTaxFormClick(int position);
+    private static final DiffUtil.ItemCallback<TaxForm> DIFF_CALLBACK =
+        new DiffUtil.ItemCallback<TaxForm>() {
+            @Override
+            public boolean areItemsTheSame(@NonNull TaxForm oldItem, @NonNull TaxForm newItem) {
+                return oldItem.getUuid().equals(newItem.getUuid());
+            }
+
+            @Override
+            public boolean areContentsTheSame(@NonNull TaxForm oldItem, @NonNull TaxForm newItem) {
+                return oldItem.equals(newItem);
+            }
+        };
+
+    public TaxFormAdapter(
+        LifecycleOwner lifeCycleOwner
+    ) {
+        this.lifecycleOwner = lifeCycleOwner;
+        this.taxFormDiffer = new AsyncListDiffer<>(this, DIFF_CALLBACK);
     }
 
-    private final TaxFormAdapterListener listener;
-
-    public TaxFormAdapter(List<TaxForm> taxForms, TaxFormAdapterListener listener) {
-        this.taxFormList = taxForms;
-        this.listener = listener;
+    public void submitList(List<TaxForm> newTaxFormList) {
+        taxFormDiffer.submitList(newTaxFormList);
     }
 
     @Override
     public int getItemViewType(int position) {
-        TaxForm taxForm = taxFormList.get(position);
+        TaxForm taxForm = Objects.requireNonNull(taxFormDiffer.getCurrentList().get(position));
         if (taxForm instanceof IncomeForm) {
             return INCOME_VIEW;
         } else if (taxForm instanceof DeductibleForm) {
@@ -51,11 +69,11 @@ public class TaxFormAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder
             case INCOME_VIEW:
                 view = LayoutInflater.from(parent.getContext())
                         .inflate(R.layout.card_income_form, parent, false);
-                return new IncomeViewHolder(view, listener);
+                return new IncomeViewHolder(view, lifecycleOwner);
             case DEDUCTIBLE_VIEW:
                 view = LayoutInflater.from(parent.getContext())
                         .inflate(R.layout.card_deductible_form, parent, false);
-                return new DeductibleViewHolder(view, listener);
+                return new DeductibleViewHolder(view, lifecycleOwner);
             default:
                 throw new IllegalArgumentException("Invalid view type");
         }
@@ -63,7 +81,7 @@ public class TaxFormAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder
 
     @Override
     public void onBindViewHolder(@NonNull RecyclerView.ViewHolder holder, int position) {
-        TaxForm taxForm = taxFormList.get(position);
+        TaxForm taxForm = taxFormDiffer.getCurrentList().get(position);
         if (holder instanceof IncomeViewHolder) {
             ((IncomeViewHolder) holder).bind((IncomeForm) taxForm);
         } else if (holder instanceof DeductibleViewHolder) {
@@ -75,11 +93,11 @@ public class TaxFormAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder
 
     @Override
     public int getItemCount() {
-        return taxFormList.size();
+        return taxFormDiffer.getCurrentList().size();
     }
 
     @Override
     public long getItemId(int position) {
-        return taxFormList.get(position).hashCode();
+        return taxFormDiffer.getCurrentList().get(position).hashCode();
     }
 }

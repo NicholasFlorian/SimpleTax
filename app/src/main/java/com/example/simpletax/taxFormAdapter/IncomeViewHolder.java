@@ -3,6 +3,7 @@ package com.example.simpletax.taxFormAdapter;
 import android.view.View;
 
 import androidx.annotation.NonNull;
+import androidx.lifecycle.LifecycleOwner;
 import androidx.recyclerview.widget.RecyclerView;
 
 import com.example.simpletax.domain.IncomeForm;
@@ -11,12 +12,12 @@ import java.util.Locale;
 
 public class IncomeViewHolder extends TaxViewHolder<IncomeForm> {
 
-    TaxFormAdapter.TaxFormAdapterListener listener;
+    private final LifecycleOwner lifecycleOwner;
 
-    public IncomeViewHolder(@NonNull View view, TaxFormAdapter.TaxFormAdapterListener listener) {
+    public IncomeViewHolder(@NonNull View view, LifecycleOwner lifecycleOwner) {
         super(view);
 
-        this.listener = listener;
+        this.lifecycleOwner = lifecycleOwner;
     }
 
     @Override
@@ -27,6 +28,7 @@ public class IncomeViewHolder extends TaxViewHolder<IncomeForm> {
         idText.setText(taxForm.getId());
 
         itemView.setOnLongClickListener(v -> {
+            /* TODO handle long click for IncomeForm
             if (listener != null) {
                 int position = getAdapterPosition();
 
@@ -34,6 +36,7 @@ public class IncomeViewHolder extends TaxViewHolder<IncomeForm> {
                     listener.onTaxFormClick(position);
                 }
             }
+            */
             return false;
         });
     }

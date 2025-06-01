@@ -20,13 +20,7 @@ public class MockSimpleTaxApi {
     private double taxableIncome;
     private double netIncome;
 
-    public interface SimpleTaxApiListener {
-        void onTaxFormsUpdated();
-    }
-
-    SimpleTaxApiListener listener;
-
-    public MockSimpleTaxApi(SimpleTaxApiListener listener) {
+    public MockSimpleTaxApi() {
         incomeFormMap = new HashMap<>();
         deductibleFormList = new ArrayList<>();
         taxFormList = new ArrayList<>();
@@ -35,8 +29,6 @@ public class MockSimpleTaxApi {
         deductions = 0;
         taxableIncome = 0;
         netIncome = 0;
-
-        this.listener = listener;
     }
 
     /* State Management Functions */
@@ -45,7 +37,6 @@ public class MockSimpleTaxApi {
         taxFormList.addAll(deductibleFormList);
         taxFormList.addAll(getIncomeForms());
         calculate();
-        listener.onTaxFormsUpdated();
     }
 
     private void calculate() {

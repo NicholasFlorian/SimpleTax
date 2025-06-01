@@ -33,4 +33,16 @@ public class DeductibleForm extends TaxForm {
     public void flipEnabled() {
         this.enabled = !this.enabled;
     }
+
+    @Override
+    public boolean equals(Object obj) {
+        if (obj == null || getClass() != obj.getClass()) return false;
+
+        DeductibleForm deductibleForm = (DeductibleForm) obj;
+
+        if (!super.equals(deductibleForm)) return false;
+        if (Double.compare(deductibleForm.deductiblePercent, deductiblePercent) != 0)
+            return false;
+        return Double.compare(deductibleForm.max, max) == 0;
+    }
 }

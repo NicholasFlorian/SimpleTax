@@ -4,6 +4,7 @@ import android.view.View;
 import android.widget.TextView;
 
 import androidx.annotation.NonNull;
+import androidx.lifecycle.LifecycleOwner;
 import androidx.recyclerview.widget.RecyclerView;
 
 import com.example.simpletax.R;
@@ -13,17 +14,17 @@ import java.util.Locale;
 
 public class DeductibleViewHolder extends TaxViewHolder<DeductibleForm> {
 
-    TaxFormAdapter.TaxFormAdapterListener listener;
+    private final LifecycleOwner lifecycleOwner;
 
     TextView maxText;
     TextView deductibleText;
 
-    public DeductibleViewHolder(@NonNull View view, TaxFormAdapter.TaxFormAdapterListener listener) {
+    public DeductibleViewHolder(@NonNull View view, LifecycleOwner owner) {
         super(view);
 
         deductibleText = view.findViewById(R.id.deductibleText);
         maxText = view.findViewById(R.id.maxText);
-        this.listener = listener;
+        this.lifecycleOwner = owner;
     }
 
     @Override
@@ -45,6 +46,7 @@ public class DeductibleViewHolder extends TaxViewHolder<DeductibleForm> {
         }
 
         itemView.setOnClickListener(v -> {
+            /* TODO handle click for DeductibleForm
             if (listener != null) {
                 int position = getAdapterPosition();
 
@@ -52,6 +54,7 @@ public class DeductibleViewHolder extends TaxViewHolder<DeductibleForm> {
                     listener.onTaxFormClick(position);
                 }
             }
+             */
         });
     }
 }

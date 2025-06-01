@@ -12,4 +12,15 @@ public class IncomeForm extends TaxForm {
     public double getAmount() {
         return amount;
     }
+
+    @Override
+    public boolean equals(Object obj) {
+        if (obj == null || getClass() != obj.getClass()) {
+            return false;
+        }
+
+        IncomeForm that = (IncomeForm) obj;
+
+        return Double.compare(that.amount, amount) == 0;
+    }
 }
