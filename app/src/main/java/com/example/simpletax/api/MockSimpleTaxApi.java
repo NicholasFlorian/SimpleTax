@@ -1,13 +1,19 @@
 package com.example.simpletax.api;
 
+import androidx.lifecycle.LiveData;
+import androidx.lifecycle.MutableLiveData;
+
 import com.example.simpletax.domain.IncomeForm;
 import com.example.simpletax.domain.DeductibleForm;
 import com.example.simpletax.domain.TaxForm;
+import com.example.simpletax.domain.TaxOutcome;
 
 import java.util.ArrayList;
 import java.util.Comparator;
 import java.util.HashMap;
 import java.util.List;
+import java.util.Objects;
+import java.util.stream.Stream;
 
 import javax.inject.Inject;
 import javax.inject.Singleton;
@@ -15,55 +21,60 @@ import javax.inject.Singleton;
 @Singleton
 public class MockSimpleTaxApi {
 
-    HashMap<String, ArrayList<IncomeForm>> incomeFormMap;
-    ArrayList<DeductibleForm> deductibleFormList;
-    ArrayList<TaxForm> taxFormList;
+    private final HashMap<String, ArrayList<IncomeForm>> incomeFormMap;
+    private final ArrayList<DeductibleForm> deductibleFormList;
+    private final MutableLiveData<List<TaxForm>> taxFormList;
 
-    private double grossIncome;
-    private double deductions;
-    private double taxableIncome;
-    private double netIncome;
+    private final MutableLiveData<TaxOutcome> taxOutcome;
 
     @Inject
     public MockSimpleTaxApi() {
         incomeFormMap = new HashMap<>();
         deductibleFormList = new ArrayList<>();
-        taxFormList = new ArrayList<>();
+        taxFormList = new MutableLiveData<>(new ArrayList<>());
 
-        grossIncome = 0;
-        deductions = 0;
-        taxableIncome = 0;
-        netIncome = 0;
+        taxOutcome = new MutableLiveData<>(new TaxOutcome(0, 0, 0, 0));
+
+        loadInitialIncomeForms();
     }
 
-    /* State Management Functions */
+    private List<IncomeForm> getIncomeForms() {
+        return incomeFormMap.values().stream().flatMap(ArrayList::stream).toList();
+    }
+
     private void updateList() {
-        taxFormList.clear();
-        taxFormList.addAll(deductibleFormList);
-        taxFormList.addAll(getIncomeForms());
+        taxFormList.setValue(
+            Stream.concat(
+                deductibleFormList.stream(),
+                getIncomeForms().stream()
+            ).sorted(Comparator.comparing(TaxForm::getCreatedAt)).toList()
+        );
+
         calculate();
     }
 
     private void calculate() {
-        grossIncome = 0;
+        double grossIncome = 0;
         for(IncomeForm incomeForm : getIncomeForms()) {
             grossIncome += incomeForm.getAmount();
         }
 
-        calculateDeductions();
-        taxableIncome = grossIncome - deductions;
-        netIncome = taxableIncome * 0.85;
+        double deductions = calculateDeductions(grossIncome);
+        double taxableIncome = grossIncome - deductions;
+        double netIncome = taxableIncome * 0.85;
+
+        taxOutcome.setValue(new TaxOutcome(grossIncome, deductions, taxableIncome, netIncome));
     }
 
-    private void calculateDeductions() {
-        deductions = 0;
+    private double calculateDeductions(double grossIncome) {
+        double deductions = 0;
         for(DeductibleForm deductibleForm : deductibleFormList) {
 
             if(!deductibleForm.isEnabled()){
                 continue;
             }
 
-            double totalTaxable = 0;
+            double totalTaxable;
             if(deductibleForm.getId().isEmpty()) {
                 totalTaxable = Math.min(deductibleForm.getMax(), grossIncome);
             }
@@ -83,14 +94,26 @@ public class MockSimpleTaxApi {
             double deductibleAmount = totalTaxable * deductibleForm.getDeductiblePercent();
             deductions += deductibleAmount;
         }
+        return deductions;
     }
 
-    /* Public Facing Functions in the API */
-    public void loadInitialIncomeForms() {
+    private void loadInitialIncomeForms() {
         this.addIncomeForm(new IncomeForm("Marc Anthony Group", "MA1", 40));
         this.addIncomeForm(new IncomeForm("Laughing Stock LTD", "L23", 140));
         this.addIncomeForm(new IncomeForm("Earls", "3RL", 300));
         this.addIncomeForm(new IncomeForm("Upper Bench", "UBN", 75));
+    }
+
+    /* Public Facing Functions in the API */
+    public void addIncomeForm(IncomeForm incomeForm) {
+        if(incomeFormMap.containsKey(incomeForm.getId())) {
+            Objects.requireNonNull(incomeFormMap.get(incomeForm.getId())).add(incomeForm);
+        } else {
+            ArrayList<IncomeForm> incomeForms = new ArrayList<>();
+            incomeForms.add(incomeForm);
+            incomeFormMap.put(incomeForm.getId(), incomeForms);
+        }
+        updateList();
     }
 
     public void fetchT5() {
@@ -100,61 +123,12 @@ public class MockSimpleTaxApi {
         updateList();
     }
 
-    public List<IncomeForm> getIncomeForms() {
-        return incomeFormMap.values().stream().flatMap(ArrayList::stream).sorted(Comparator.comparing(TaxForm::getCreatedAt)).toList();
-    }
-
-    public List<TaxForm> getTaxForms() {
+    public LiveData<List<TaxForm>> getTaxForms() {
         return taxFormList;
     }
 
-    public int addIncomeForm(IncomeForm incomeForm) {
-        if(incomeFormMap.containsKey(incomeForm.getId())) {
-            incomeFormMap.get(incomeForm.getId()).add(incomeForm);
-        } else {
-            ArrayList<IncomeForm> incomeForms = new ArrayList<>();
-            incomeForms.add(incomeForm);
-            incomeFormMap.put(incomeForm.getId(), incomeForms);
-        }
-        updateList();
-        return taxFormList.size() - 1;
+    public LiveData<TaxOutcome> getTaxOutcome() {
+        return taxOutcome;
     }
-
-    public void removeIncomeForm(int position) {
-        TaxForm taxForm = taxFormList.get(position);
-        if (taxForm instanceof IncomeForm) {
-            String id = taxForm.getId();
-            ArrayList<IncomeForm> incomeForms = incomeFormMap.get(id);
-            if (incomeForms != null) {
-                incomeForms.remove(taxForm);
-                if (incomeForms.isEmpty()) {
-                    incomeFormMap.remove(id);
-                }
-            }
-        }
-        updateList();
-    }
-
-    public void toggleDeductibleForm(int position) {
-        DeductibleForm deductibleForm = (DeductibleForm) taxFormList.get(position);
-        deductibleForm.flipEnabled();
-        updateList();
-    }
-
-    public double getGrossIncome() {
-        return grossIncome;
-    }
-
-    public double getDeductions() {
-        return deductions;
-    }
-
-    public double getTaxableIncome() {
-        return taxableIncome;
-    }
-
-    public double getNetIncome() {
-        return netIncome;
-    }
-
 }
+

@@ -57,34 +57,28 @@ public class TaxCalculatorActivity extends AppCompatActivity {
         netIncomeText = findViewById(R.id.netIncomeText);
         deductionsText = findViewById(R.id.deductionsText);
 
-        /*
-         * These functions within simpleTaxAPI call onUpdated() so they must be called
-         * after the text views are initialized
-         */
-        /* TODO call these functions in the ViewModel
-        simpleTaxApi.fetchT5();
-        simpleTaxApi.loadInitialIncomeForms();
-        */
-
         taxCalculatorViewModel.getTaxForms().observe(this, taxForms ->
             taxFormAdapter.submitList(taxForms)
         );
 
-        taxCalculatorViewModel.getGrossIncome().observe(this, grossIncome -> {
-            grossIncomeText.setText(String.format(Locale.CANADA, "%.2f", grossIncome));
+        taxCalculatorViewModel.getTaxOutcome().observe(this, taxOutcome -> {
+            grossIncomeText.setText(
+                String.format(Locale.CANADA, "%.2f", taxOutcome.getGrossIncome()));
+            deductionsText.setText(
+                String.format(Locale.CANADA, "%.2f", taxOutcome.getDeductions()));
+            taxableIncomeText.setText(
+                String.format(Locale.CANADA, "%.2f", taxOutcome.getTaxableIncome()));
+            netIncomeText.setText(
+                String.format(Locale.CANADA, "%.2f", taxOutcome.getNetIncome()));
         });
+    }
 
-        taxCalculatorViewModel.getDeductions().observe(this, deductions -> {
-            deductionsText.setText(String.format(Locale.CANADA, "%.2f", deductions));
-        });
+    @Override
+    protected void onResume() {
+        super.onResume();
 
-        taxCalculatorViewModel.getTaxableIncome().observe(this, taxableIncome -> {
-            taxableIncomeText.setText(String.format(Locale.CANADA, "%.2f", taxableIncome));
-        });
-
-        taxCalculatorViewModel.getNetIncome().observe(this, netIncome -> {
-            netIncomeText.setText(String.format(Locale.CANADA, "%.2f", netIncome));
-        });
+        // Fetch T5 data when the activity resumes
+        taxCalculatorViewModel.fetchT5();
     }
 
     public void showAddT4Dialog() {
