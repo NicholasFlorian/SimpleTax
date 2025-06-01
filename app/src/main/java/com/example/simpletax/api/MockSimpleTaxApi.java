@@ -9,6 +9,10 @@ import java.util.Comparator;
 import java.util.HashMap;
 import java.util.List;
 
+import javax.inject.Inject;
+import javax.inject.Singleton;
+
+@Singleton
 public class MockSimpleTaxApi {
 
     HashMap<String, ArrayList<IncomeForm>> incomeFormMap;
@@ -20,6 +24,7 @@ public class MockSimpleTaxApi {
     private double taxableIncome;
     private double netIncome;
 
+    @Inject
     public MockSimpleTaxApi() {
         incomeFormMap = new HashMap<>();
         deductibleFormList = new ArrayList<>();

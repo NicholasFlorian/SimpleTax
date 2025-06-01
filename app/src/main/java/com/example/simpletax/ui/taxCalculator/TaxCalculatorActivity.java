@@ -3,44 +3,42 @@ package com.example.simpletax.ui.taxCalculator;
 import android.os.Bundle;
 import android.widget.Button;
 import android.widget.TextView;
-import android.widget.Toast;
 
 import androidx.appcompat.app.AppCompatActivity;
+import androidx.lifecycle.ViewModelProvider;
 import androidx.recyclerview.widget.DividerItemDecoration;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
 import com.example.simpletax.R;
 import com.example.simpletax.taxFormAdapter.TaxFormAdapter;
-import com.example.simpletax.domain.IncomeForm;
-import com.example.simpletax.domain.DeductibleForm;
-import com.example.simpletax.domain.TaxForm;
 import com.example.simpletax.ui.addIncome.AddIncomeDialogFragment;
 
 import java.util.Locale;
 
-public class TaxCalculatorActivity extends AppCompatActivity implements
-        AddIncomeDialogFragment.AddIncomeDialogListener
-{
+import dagger.hilt.android.AndroidEntryPoint;
+
+@AndroidEntryPoint
+public class TaxCalculatorActivity extends AppCompatActivity {
+
     TaxCalculatorViewModel taxCalculatorViewModel;
 
-    RecyclerView taxFormRecyclerView;
-    TaxFormAdapter taxFormAdapter;
+    private RecyclerView taxFormRecyclerView;
+    private TaxFormAdapter taxFormAdapter;
 
-    Button addT4Button;
+    private Button addT4Button;
 
-    TextView grossIncomeText;
-    TextView deductionsText;
-    TextView taxableIncomeText;
-    TextView netIncomeText;
+    private TextView grossIncomeText;
+    private TextView deductionsText;
+    private TextView taxableIncomeText;
+    private TextView netIncomeText;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
 
-        // Initialize the ViewModel
-        taxCalculatorViewModel = new TaxCalculatorViewModel();
+        taxCalculatorViewModel = new ViewModelProvider(this).get(TaxCalculatorViewModel.class);
 
         // Initialize the RecyclerView and Adapter
         taxFormRecyclerView = findViewById(R.id.taxFormRecyclerView);
@@ -92,27 +90,5 @@ public class TaxCalculatorActivity extends AppCompatActivity implements
     public void showAddT4Dialog() {
         AddIncomeDialogFragment dialog = new AddIncomeDialogFragment();
         dialog.show(getSupportFragmentManager(), "AddT4Dialog");
-    }
-
-    @Override
-    public void onDialogAddClick(IncomeForm incomeForm) {
-        int insertedAt = simpleTaxApi.addIncomeForm(incomeForm);
-        taxFormAdapter.notifyItemInserted(insertedAt);
-    }
-
-    @Override
-    public void onTaxFormClick(int position) {
-        TaxForm taxForm = simpleTaxApi.getTaxForms().get(position);
-        if (taxForm instanceof IncomeForm) {
-            simpleTaxApi.removeIncomeForm(position);
-            taxFormAdapter.notifyItemRemoved(position);
-        }
-        else if(taxForm instanceof DeductibleForm) {
-            simpleTaxApi.toggleDeductibleForm(position);
-            taxFormAdapter.notifyItemChanged(position);
-        }
-        else {
-            Toast.makeText(this, "This not a valid form", Toast.LENGTH_SHORT).show();
-        }
     }
 }
