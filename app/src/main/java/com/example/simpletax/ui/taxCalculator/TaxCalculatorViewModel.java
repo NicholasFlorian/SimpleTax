@@ -16,7 +16,7 @@ import dagger.hilt.android.lifecycle.HiltViewModel;
 @HiltViewModel
 public class TaxCalculatorViewModel extends ViewModel {
 
-    private MockSimpleTaxApi simpleTaxApi;
+    private final MockSimpleTaxApi simpleTaxApi;
 
     @Inject
     public TaxCalculatorViewModel(MockSimpleTaxApi simpleTaxApi) {

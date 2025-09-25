@@ -12,19 +12,19 @@ import com.example.simpletax.domain.DeductibleForm;
 
 import java.util.Locale;
 
-public class DeductibleViewHolder extends TaxViewHolder<DeductibleForm> {
+import dagger.hilt.android.AndroidEntryPoint;
 
-    private final LifecycleOwner lifecycleOwner;
+@AndroidEntryPoint
+public class DeductibleViewHolder extends TaxViewHolder<DeductibleForm> {
 
     TextView maxText;
     TextView deductibleText;
 
-    public DeductibleViewHolder(@NonNull View view, LifecycleOwner owner) {
+    public DeductibleViewHolder(@NonNull View view) {
         super(view);
 
         deductibleText = view.findViewById(R.id.deductibleText);
         maxText = view.findViewById(R.id.maxText);
-        this.lifecycleOwner = owner;
     }
 
     @Override
@@ -46,7 +46,6 @@ public class DeductibleViewHolder extends TaxViewHolder<DeductibleForm> {
         }
 
         itemView.setOnClickListener(v -> {
-            /* TODO handle click for DeductibleForm
             if (listener != null) {
                 int position = getAdapterPosition();
 
@@ -54,7 +53,6 @@ public class DeductibleViewHolder extends TaxViewHolder<DeductibleForm> {
                     listener.onTaxFormClick(position);
                 }
             }
-             */
         });
     }
 }

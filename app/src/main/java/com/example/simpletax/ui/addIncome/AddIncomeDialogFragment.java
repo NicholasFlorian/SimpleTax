@@ -11,31 +11,29 @@ import android.widget.Toast;
 
 import androidx.annotation.NonNull;
 import androidx.fragment.app.DialogFragment;
+import androidx.lifecycle.ViewModelProvider;
+import androidx.lifecycle.ViewModelStoreOwner;
 
 import com.example.simpletax.R;
 import com.example.simpletax.domain.IncomeForm;
 
+import dagger.hilt.android.AndroidEntryPoint;
+
+@AndroidEntryPoint
 public class AddIncomeDialogFragment extends DialogFragment {
 
-    public interface AddIncomeDialogListener {
-        void onDialogAddClick(IncomeForm incomeForm);
-    }
+    private AddIncomeViewModel addIncomeViewModel;
 
-    private AddIncomeDialogListener listener;
-
-    EditText nameEditText;
-    EditText amountEditText;
-    EditText idEditText;
-    Button addButton;
+    private EditText nameEditText;
+    private EditText amountEditText;
+    private EditText idEditText;
+    private Button addButton;
 
     @Override
     public void onAttach(@NonNull Context context) {
         super.onAttach(context);
-        try {
-            listener = (AddIncomeDialogListener) context;
-        } catch (ClassCastException e) {
-            throw new ClassCastException(context + " must implement AddT4DialogListener");
-        }
+
+        addIncomeViewModel = new ViewModelProvider(requireActivity()).get(AddIncomeViewModel.class);
     }
 
     @Override
@@ -82,7 +80,11 @@ public class AddIncomeDialogFragment extends DialogFragment {
             reportError("Amount must be greater than 0");
             return;
         }
-        listener.onDialogAddClick(new IncomeForm(nameValue, idValue.toUpperCase(), amountDouble));
+
+        addIncomeViewModel.addIncome(
+            new IncomeForm(nameValue, idValue.toUpperCase(), amountDouble)
+        );
+
         dismiss();
     }
 

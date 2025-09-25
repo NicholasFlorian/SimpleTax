@@ -130,5 +130,21 @@ public class MockSimpleTaxApi {
     public LiveData<TaxOutcome> getTaxOutcome() {
         return taxOutcome;
     }
+
+    public void removeIncomeForm(IncomeForm toDelete) {
+        ArrayList<IncomeForm> incomeForms = incomeFormMap.get(toDelete.getId());
+        if (incomeForms != null) {
+            incomeForms.remove(toDelete);
+            if (incomeForms.isEmpty()) {
+                incomeFormMap.remove(toDelete.getId());
+            }
+        }
+        updateList();
+    }
+
+    public void toggleDeductibleForm(DeductibleForm toToggle) {
+        toToggle.flipEnabled();
+        updateList();
+    }
 }
 

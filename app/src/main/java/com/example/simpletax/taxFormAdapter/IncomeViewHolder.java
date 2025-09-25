@@ -10,14 +10,13 @@ import com.example.simpletax.domain.IncomeForm;
 
 import java.util.Locale;
 
+import dagger.hilt.android.AndroidEntryPoint;
+
+@AndroidEntryPoint
 public class IncomeViewHolder extends TaxViewHolder<IncomeForm> {
 
-    private final LifecycleOwner lifecycleOwner;
-
-    public IncomeViewHolder(@NonNull View view, LifecycleOwner lifecycleOwner) {
+    public IncomeViewHolder(@NonNull View view) {
         super(view);
-
-        this.lifecycleOwner = lifecycleOwner;
     }
 
     @Override
@@ -28,7 +27,6 @@ public class IncomeViewHolder extends TaxViewHolder<IncomeForm> {
         idText.setText(taxForm.getId());
 
         itemView.setOnLongClickListener(v -> {
-            /* TODO handle long click for IncomeForm
             if (listener != null) {
                 int position = getAdapterPosition();
 
@@ -36,7 +34,6 @@ public class IncomeViewHolder extends TaxViewHolder<IncomeForm> {
                     listener.onTaxFormClick(position);
                 }
             }
-            */
             return false;
         });
     }

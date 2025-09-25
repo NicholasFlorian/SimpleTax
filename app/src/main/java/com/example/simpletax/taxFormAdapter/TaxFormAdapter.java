@@ -69,11 +69,11 @@ public class TaxFormAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder
             case INCOME_VIEW:
                 view = LayoutInflater.from(parent.getContext())
                         .inflate(R.layout.card_income_form, parent, false);
-                return new IncomeViewHolder(view, lifecycleOwner);
+                return new IncomeViewHolder(view, this);
             case DEDUCTIBLE_VIEW:
                 view = LayoutInflater.from(parent.getContext())
                         .inflate(R.layout.card_deductible_form, parent, false);
-                return new DeductibleViewHolder(view, lifecycleOwner);
+                return new DeductibleViewHolder(view, this);
             default:
                 throw new IllegalArgumentException("Invalid view type");
         }
