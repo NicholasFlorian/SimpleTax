@@ -10,10 +10,10 @@ public class RestSimpleTaxApi implements SimpleTaxApi {
 
     @Override
     public void loadInitialIncomeForms() {
-        this.addIncomeForm(new IncomeForm("Marc Anthony Group", "MA1", 40));
-        this.addIncomeForm(new IncomeForm("Laughing Stock LTD", "L23", 140));
+        this.addIncomeForm(new IncomeForm("Marc Anthony Group", "BCTD", 40));
+        this.addIncomeForm(new IncomeForm("Laughing Stock LTD", "WSET", 140));
         this.addIncomeForm(new IncomeForm("Earls", "3RL", 300));
-        this.addIncomeForm(new IncomeForm("Upper Bench", "UBN", 75));
+        this.addIncomeForm(new IncomeForm("Upper Bench", "BCTD", 75));
     }
 
     @Override
