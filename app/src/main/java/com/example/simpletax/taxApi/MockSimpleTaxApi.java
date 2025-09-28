@@ -20,10 +20,6 @@ public class MockSimpleTaxApi implements SimpleTaxApi {
     private double taxableIncome;
     private double netIncome;
 
-    public interface SimpleTaxApiListener {
-        void onTaxFormsUpdated();
-    }
-
     SimpleTaxApiListener listener;
 
     public MockSimpleTaxApi(SimpleTaxApiListener listener) {
@@ -40,12 +36,12 @@ public class MockSimpleTaxApi implements SimpleTaxApi {
     }
 
     /* State Management Functions */
-    private void updateList() {
+    private void updateList(int position) {
         taxFormList.clear();
         taxFormList.addAll(deductibleFormList);
         taxFormList.addAll(getIncomeForms());
         calculate();
-        listener.onTaxFormsUpdated();
+        listener.onTaxFormsUpdated(position);
     }
 
     private void calculate() {
@@ -99,9 +95,8 @@ public class MockSimpleTaxApi implements SimpleTaxApi {
 
     public void fetchT5() {
         deductibleFormList.clear();
-        deductibleFormList.add(new DeductibleForm("Young Chef Initiative", "3RL",  0.2, 200));
-        deductibleFormList.add(new DeductibleForm("WSET", "",  0.40, 150));
-        updateList();
+        addDeductibleForm(new DeductibleForm("Young Chef Initiative", "3RL",  0.2, 200));
+        addDeductibleForm(new DeductibleForm("WSET", "",  0.40, 150));
     }
 
     public List<IncomeForm> getIncomeForms() {
@@ -112,7 +107,12 @@ public class MockSimpleTaxApi implements SimpleTaxApi {
         return taxFormList;
     }
 
-    public int addIncomeForm(IncomeForm incomeForm) {
+    public void addDeductibleForm(DeductibleForm deductibleForm) {
+        deductibleFormList.add(deductibleForm);
+        updateList(deductibleFormList.size() - 1);
+    }
+
+    public void addIncomeForm(IncomeForm incomeForm) {
         if(incomeFormMap.containsKey(incomeForm.getId())) {
             incomeFormMap.get(incomeForm.getId()).add(incomeForm);
         } else {
@@ -120,8 +120,8 @@ public class MockSimpleTaxApi implements SimpleTaxApi {
             incomeForms.add(incomeForm);
             incomeFormMap.put(incomeForm.getId(), incomeForms);
         }
-        updateList();
-        return taxFormList.size() - 1;
+
+        updateList(taxFormList.size() - 1);
     }
 
     public void removeIncomeForm(int position) {
@@ -136,13 +136,13 @@ public class MockSimpleTaxApi implements SimpleTaxApi {
                 }
             }
         }
-        updateList();
+        updateList(position);
     }
 
     public void toggleDeductibleForm(int position) {
         DeductibleForm deductibleForm = (DeductibleForm) taxFormList.get(position);
         deductibleForm.flipEnabled();
-        updateList();
+        updateList(position);
     }
 
     public double getGrossIncome() {

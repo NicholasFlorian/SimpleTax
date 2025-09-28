@@ -1,5 +1,6 @@
 package com.example.simpletax.taxApi;
 
+import com.example.simpletax.domain.DeductibleForm;
 import com.example.simpletax.domain.IncomeForm;
 import com.example.simpletax.domain.TaxForm;
 
@@ -7,6 +8,12 @@ import java.util.Collections;
 import java.util.List;
 
 public class RestSimpleTaxApi implements SimpleTaxApi {
+
+    SimpleTaxApiListener listener;
+
+    public RestSimpleTaxApi(SimpleTaxApiListener listener) {
+        this.listener = listener;
+    }
 
     @Override
     public void loadInitialIncomeForms() {
@@ -32,8 +39,13 @@ public class RestSimpleTaxApi implements SimpleTaxApi {
     }
 
     @Override
-    public int addIncomeForm(IncomeForm incomeForm) {
-        return 0;
+    public void addDeductibleForm(DeductibleForm deductibleForm){
+
+    }
+
+    @Override
+    public void addIncomeForm(IncomeForm incomeForm) {
+
     }
 
     @Override

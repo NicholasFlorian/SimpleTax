@@ -1,11 +1,16 @@
 package com.example.simpletax.taxApi;
 
+import com.example.simpletax.domain.DeductibleForm;
 import com.example.simpletax.domain.IncomeForm;
 import com.example.simpletax.domain.TaxForm;
 
 import java.util.List;
 
 public interface SimpleTaxApi {
+
+    interface SimpleTaxApiListener {
+        void onTaxFormsUpdated(int position);
+    }
 
     double EFFECTIVE_TAX_RATE = 0.25;
 
@@ -17,7 +22,9 @@ public interface SimpleTaxApi {
 
     List<TaxForm> getTaxForms();
 
-    int addIncomeForm(IncomeForm incomeForm);
+    void addDeductibleForm(DeductibleForm deductibleForm);
+
+    void addIncomeForm(IncomeForm incomeForm);
 
     void removeIncomeForm(int position);
 

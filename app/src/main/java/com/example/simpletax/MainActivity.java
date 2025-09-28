@@ -15,6 +15,8 @@ import com.example.simpletax.domain.IncomeForm;
 import com.example.simpletax.domain.DeductibleForm;
 import com.example.simpletax.domain.TaxForm;
 import com.example.simpletax.taxApi.MockSimpleTaxApi;
+import com.example.simpletax.taxApi.RestSimpleTaxApi;
+import com.example.simpletax.taxApi.SimpleTaxApi;
 
 import java.util.Locale;
 
@@ -34,8 +36,7 @@ public class MainActivity extends AppCompatActivity implements
     TextView taxableIncomeText;
     TextView netIncomeText;
 
-    // replace by your API :)
-    private MockSimpleTaxApi simpleTaxApi;
+    private SimpleTaxApi simpleTaxApi;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -48,7 +49,7 @@ public class MainActivity extends AppCompatActivity implements
         taxFormRecyclerView.addItemDecoration(
                 new DividerItemDecoration(this, DividerItemDecoration.VERTICAL));
 
-        simpleTaxApi = new MockSimpleTaxApi(this);
+        simpleTaxApi = new RestSimpleTaxApi(this);
         taxFormAdapter = new TaxFormAdapter(simpleTaxApi.getTaxForms(), this);
         taxFormRecyclerView.setAdapter(taxFormAdapter);
 
@@ -75,8 +76,7 @@ public class MainActivity extends AppCompatActivity implements
 
     @Override
     public void onDialogAddClick(IncomeForm incomeForm) {
-        int insertedAt = simpleTaxApi.addIncomeForm(incomeForm);
-        taxFormAdapter.notifyItemInserted(insertedAt);
+        simpleTaxApi.addIncomeForm(incomeForm);
     }
 
     @Override
@@ -84,11 +84,9 @@ public class MainActivity extends AppCompatActivity implements
         TaxForm taxForm = simpleTaxApi.getTaxForms().get(position);
         if (taxForm instanceof IncomeForm) {
             simpleTaxApi.removeIncomeForm(position);
-            taxFormAdapter.notifyItemRemoved(position);
         }
         else if(taxForm instanceof DeductibleForm) {
             simpleTaxApi.toggleDeductibleForm(position);
-            taxFormAdapter.notifyItemChanged(position);
         }
         else {
             Toast.makeText(this, "This not a valid form", Toast.LENGTH_SHORT).show();
@@ -96,14 +94,23 @@ public class MainActivity extends AppCompatActivity implements
     }
 
     @Override
-    public void onTaxFormsUpdated() {
+    public void onTaxFormsUpdated(int position) {
+
+        // Update position in the taxForm Adapter
+        taxFormAdapter.notifyItemChanged(position);
+
+        // Update numbers in the UI
         grossIncomeText.setText(
-                String.format(Locale.CANADA, "%.2f", simpleTaxApi.getGrossIncome()));
+                String.format(Locale.CANADA, "%.2f", simpleTaxApi.getGrossIncome())
+        );
         deductionsText.setText(
-                String.format(Locale.CANADA, "%.2f", simpleTaxApi.getDeductions()));
+                String.format(Locale.CANADA, "%.2f", simpleTaxApi.getDeductions())
+        );
         taxableIncomeText.setText(
-                String.format(Locale.CANADA,"%.2f", simpleTaxApi.getTaxableIncome()));
+                String.format(Locale.CANADA,"%.2f", simpleTaxApi.getTaxableIncome())
+        );
         netIncomeText.setText(
-                String.format(Locale.CANADA,"%.2f", simpleTaxApi.getNetIncome()));
+                String.format(Locale.CANADA,"%.2f", simpleTaxApi.getNetIncome())
+        );
     }
 }
