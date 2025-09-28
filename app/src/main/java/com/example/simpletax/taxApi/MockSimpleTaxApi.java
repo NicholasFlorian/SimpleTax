@@ -1,4 +1,4 @@
-package com.example.simpletax;
+package com.example.simpletax.taxApi;
 
 import com.example.simpletax.domain.IncomeForm;
 import com.example.simpletax.domain.DeductibleForm;
@@ -9,7 +9,7 @@ import java.util.Comparator;
 import java.util.HashMap;
 import java.util.List;
 
-public class MockSimpleTaxApi {
+public class MockSimpleTaxApi implements SimpleTaxApi {
 
     HashMap<String, ArrayList<IncomeForm>> incomeFormMap;
     ArrayList<DeductibleForm> deductibleFormList;
@@ -56,7 +56,7 @@ public class MockSimpleTaxApi {
 
         calculateDeductions();
         taxableIncome = grossIncome - deductions;
-        netIncome = taxableIncome * 0.85;
+        netIncome = grossIncome - taxableIncome * EFFECTIVE_TAX_RATE;
     }
 
     private void calculateDeductions() {

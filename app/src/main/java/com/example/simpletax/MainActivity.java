@@ -14,8 +14,8 @@ import com.example.simpletax.TaxFormAdapter.TaxFormAdapter;
 import com.example.simpletax.domain.IncomeForm;
 import com.example.simpletax.domain.DeductibleForm;
 import com.example.simpletax.domain.TaxForm;
+import com.example.simpletax.taxApi.MockSimpleTaxApi;
 
-import java.util.ArrayList;
 import java.util.Locale;
 
 public class MainActivity extends AppCompatActivity implements
