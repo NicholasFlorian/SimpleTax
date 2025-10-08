@@ -2,6 +2,7 @@ package com.example.simpletax.taxApi;
 
 import com.example.simpletax.BuildConfig;
 import retrofit2.Retrofit;
+import retrofit2.converter.gson.GsonConverterFactory;
 
 public class Client {
 
@@ -13,9 +14,18 @@ public class Client {
      *      {"name":"WSET Return","id":"WSET","deductiblePercent":1,"minGrossIncome":150}
      *  ]
      */
-    Retrofit retrofit = new Retrofit.Builder()
-            .baseUrl(BuildConfig.API_BASE_URL)
-            .build();
+    static Retrofit retrofit;
+
+
+    static Retrofit getRetrofitClient() {
+        if(retrofit == null) {
+            retrofit = new Retrofit.Builder()
+                .baseUrl(BuildConfig.API_BASE_URL)
+                .addConverterFactory(GsonConverterFactory.create())
+                .build();
+        }
+        return retrofit;
+    }
 
 }
  
