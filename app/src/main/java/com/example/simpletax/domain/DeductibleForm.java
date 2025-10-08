@@ -33,4 +33,6 @@ public class DeductibleForm extends TaxForm {
     public void flipEnabled() {
         this.enabled = !this.enabled;
     }
+
+    public void setEnabled(boolean isEnabled) { this.enabled = isEnabled; };
 }
